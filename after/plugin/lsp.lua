@@ -17,8 +17,31 @@ require('mason-lspconfig').setup({
 	  'eslint',
 	  'lua_ls',
 	  'vimls',
+      'clangd',
   },
   handlers = {
     lsp_zero.default_setup,
   },
 })
+vim.keymap.set('n', '<leader>e', vim.diagnostic.open_float)
+vim.keymap.set('n', '[d', vim.diagnostic.goto_prev)
+vim.keymap.set('n', ']d', vim.diagnostic.goto_next)
+vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist)
+--local cmp = require('cmp')
+--local cmp_select = {behavior = cmp.SelectBehavior.Select}
+--local cmp_mappings = lsp_zero.defaults.cmp_mappings({
+--    ['<C-p>'] = cmp.mapping.select_prev_item(cmp_select),
+--    ['<C-n>'] = cmp.mapping.select_next_item(cmp_select),
+--    ['<C-y>'] = cmp.mapping.confirm({ select = true }),
+--    ["<C-Space>"] = cmp.mapping.complete(),
+--})
+local capabilities = vim.lsp.protocol.make_client_capabilities()
+capabilities.textDocument.completion.completionItem.snippetSupport = true
+require('lspconfig')['tsserver'].setup {
+  on_attach = function() end,
+  capabilities = capabilities,
+}
+require('lspconfig')['eslint'].setup {
+  on_attach = function() end,
+  capabilities = capabilities,
+}
